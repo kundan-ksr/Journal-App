@@ -20,7 +20,7 @@ buildNumber.properties
 /src/main/resources/application.properties
 
 # Ignore entire config package
-src/main/java/com/learnspringboot/myJournalApp/config/
+#src/main/java/com/learnspringboot/myJournalApp/config/
 
 # === Gradle (if applicable) ===
 .gradle/
