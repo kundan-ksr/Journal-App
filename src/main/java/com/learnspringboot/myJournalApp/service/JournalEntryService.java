@@ -1,48 +1,75 @@
 package com.learnspringboot.myJournalApp.service;
 
 import com.learnspringboot.myJournalApp.entity.JournalEntry;
+import com.learnspringboot.myJournalApp.entity.User;
 import com.learnspringboot.myJournalApp.repository.JournalEntryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Component  // Creates Object of below class as bean,
-            // so it can be used directly without initializing
-            // the object of below class.
+// so it can be used directly without initializing
+// the object of below class.
 @Slf4j
 public class JournalEntryService {
 
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-//Create service
-    public void saveEntry(JournalEntry journalEntry){
+    @Autowired
+    private UserService userService;
+
+    //Create service
+    @Transactional
+    public void saveEntry(JournalEntry journalEntry, String userName) {
         try {
+            User user = userService.findByUserName(userName);
             journalEntry.setDate(LocalDateTime.now());
+            JournalEntry saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            //here if we add this line "user.setUserName(null);" then below line will not execute, but above lines already got executed and JournalEntry data got saved in journal_entries, but it didn't get updated in User,
+            // hence there is no atomicity and data may not be correct, so we will make it as Transaction(Follows Atomicity property of ACID)
+            //To resolve this problem we use @Transactional above this.
+            // user.setUserName(null);
+            userService.saveEntry(user);
+        } catch (Exception e) {
+            log.error("Exception", e);
+            throw new RuntimeException("An error occurred while saving the entry.", e);
+        }
+    }
+
+    //Update service - without userName parameter, to just update the content & not interfere with user details/table.
+    public void saveEntry(JournalEntry journalEntry) {
+        try {
             journalEntryRepository.save(journalEntry);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception", e);
         }
     }
 
-//Read All service
-    public List<JournalEntry> getAll(){
+    //Read All service
+    public List<JournalEntry> getAll() {
         return journalEntryRepository.findAll();
     }
 
-//Read by id service
-public Optional<JournalEntry> findById(ObjectId id) {
-    return journalEntryRepository.findById(id);
-}    //    public Optional<JournalEntry> findById(ObjectId id){
-            //        return journalEntryRepository.findById(id).orElse(null);
-            //    }
+    //Read by id service
+    public Optional<JournalEntry> findById(ObjectId id) {
+        return journalEntryRepository.findById(id);
+    }    //    public Optional<JournalEntry> findById(ObjectId id){
+    //        return journalEntryRepository.findById(id).orElse(null);
+    //    }
 
-    public void deleteEntry(ObjectId id){
+    // Delete service
+    public void deleteEntry(ObjectId id, String userName) {
+        User user = userService.findByUserName(userName);
+        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+        userService.saveEntry(user);
         journalEntryRepository.deleteById(id);
     }
 }
