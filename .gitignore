@@ -16,6 +16,12 @@ buildNumber.properties
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# ignore application.properties
+/src/main/resources/application.properties
+
+# Ignore entire config package
+src/main/java/com/learnspringboot/myJournalApp/config/
+
 # === Gradle (if applicable) ===
 .gradle/
 build/
