@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/user")
@@ -17,10 +15,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAllUsers(){
-        return userService.getAll();
-    }
+// Below endpoint is removed since User creation and starting of Spring Security.
+// Removed getAllUser because we want only admin to view user's not anyone unauthorized.
+//    @GetMapping
+//    public List<User> getAllUsers(){
+//        return userService.getAll();
+//    }
 
     @PostMapping
     public void crateUser(@RequestBody User user){
