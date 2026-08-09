@@ -9,7 +9,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableTransactionManagement
+@EnableTransactionManagement // <--- For enabling transaction feature (Rollback if not complete, i.e, atomic) across desired method in whole application.
 public class MyJournalApplication {
 
     public static void main(String[] args) {
@@ -17,9 +17,13 @@ public class MyJournalApplication {
     }
 
     /* Below methods helps achieve Atomic operation using @Transactional annotation, see "SaveEntry" method of JornalEntryService class.
-        // Create service method-
+    For details see SaveEntry method of JournalEntryService class.
+
             @Transactional
-            public void saveEntry(JournalEntry journalEntry, String userName) {
+            public void saveEntry(JournalEntry journalEntry, String userName)
+                {
+                    ...
+                }
     */
 
     @Bean

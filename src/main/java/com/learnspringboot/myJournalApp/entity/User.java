@@ -37,7 +37,6 @@ public class User {
     private String password;
 
     @DBRef // this creates a reference of journal entries which is stored in user's database as a reference.
-            // for detail see video 16 of playlist (Engineering Digest).
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
     private List<String> roles;
