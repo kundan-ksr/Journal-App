@@ -24,14 +24,14 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     //Create service
-    public void saveEntry(User user) {
+    public void saveNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
     }
 
-    //Create service
-    public void saveNewUser(User user) { userRepository.save(user); }
+
+    public void saveUser(User user) { userRepository.save(user); }
 
     //Read All service
     public List<User> getAll() {

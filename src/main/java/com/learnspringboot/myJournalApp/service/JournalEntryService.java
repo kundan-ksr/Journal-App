@@ -3,6 +3,7 @@ package com.learnspringboot.myJournalApp.service;
 import com.learnspringboot.myJournalApp.entity.JournalEntry;
 import com.learnspringboot.myJournalApp.entity.User;
 import com.learnspringboot.myJournalApp.repository.JournalEntryRepository;
+import com.learnspringboot.myJournalApp.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     //Create service
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String userName) {
@@ -37,7 +41,7 @@ public class JournalEntryService {
             // hence there is no atomicity and data may not be correct, so we will make it as Transaction(Follows Atomicity property of ACID)
             //To resolve this problem we use @Transactional above this.
             // user.setUserName(null);
-            userService.saveEntry(user);
+            userService.saveUser(user);
         } catch (Exception e) {
             log.error("Exception", e);
             throw new RuntimeException("An error occurred while saving the entry.", e);
@@ -66,10 +70,20 @@ public class JournalEntryService {
     //    }
 
     // Delete service
-    public void deleteEntry(ObjectId id, String userName) {
-        User user = userService.findByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userService.saveEntry(user);
-        journalEntryRepository.deleteById(id);
+    @Transactional
+    public boolean deleteById(ObjectId id, String userName) {
+        boolean removed = false;
+        try {
+            User user = userService.findByUserName(userName);
+            removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if(removed) {
+                userService.saveUser(user);
+                journalEntryRepository.deleteById(id);
+            }
+            return removed;
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new RuntimeException("An error occurred while deleting the entry.", e);
+        }
     }
 }
