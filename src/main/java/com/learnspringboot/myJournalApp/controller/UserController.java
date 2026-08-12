@@ -1,10 +1,13 @@
 package com.learnspringboot.myJournalApp.controller;
 
 import com.learnspringboot.myJournalApp.entity.User;
+import com.learnspringboot.myJournalApp.repository.UserRepository;
 import com.learnspringboot.myJournalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,6 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
 // Below endpoint is removed since User creation and starting of Spring Security.
 // Removed getAllUser because we want only admin to view user's not anyone unauthorized.
 //    @GetMapping
@@ -22,19 +28,31 @@ public class UserController {
 //        return userService.getAll();
 //    }
 
-    @PostMapping
-    public void crateUser(@RequestBody User user){
-        userService.saveEntry(user);
-    }
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String userName){
+//    For making a New User no authorization is required, so below method is sent in "Public
+//    Controller ~ which open for all without authorization"
+//    @PostMapping
+//    public void crateUser(@RequestBody User user){
+//        userService.saveEntry(user);
+//    }
+
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // this authenticates user itself and does need "userName" as path variable, Spring Security handles credentials matching.
+        String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        if(userInDb != null){
-            userInDb.setUserName(user.getUserName());
-            userInDb.setPassword(user.getPassword());
-            userService.saveEntry(userInDb);
-        }
+        userInDb.setUserName(user.getUserName());
+        userInDb.setPassword(user.getPassword());
+        userService.saveEntry(userInDb);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUserById(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteByUserName(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
