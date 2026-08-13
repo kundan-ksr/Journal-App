@@ -19,6 +19,9 @@ buildNumber.properties
 # ignore application.properties
 /src/main/resources/application.properties
 
+# ignore application.yml
+/src/main/resources/application.yml
+
 #ignore Notes.txt
 src/main/java/com/learnspringboot/myJournalApp/Notes.txt
 
