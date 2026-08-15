@@ -19,6 +19,10 @@ buildNumber.properties
 # ignore application.properties
 /src/main/resources/application.properties
 
+# ignore all files of resources folder.
+/src/main/resources/**
+
+
 # ignore application.yml
 /src/main/resources/application.yml
 
