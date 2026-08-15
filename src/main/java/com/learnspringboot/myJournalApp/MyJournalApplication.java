@@ -14,6 +14,9 @@ public class MyJournalApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MyJournalApplication.class, args);
+
+//        ConfigurableApplicationContext context = SpringApplication.run(MyJournalApplication.class, args);
+//        System.out.println(context.getEnvironment()); // this line prints which Profile is running i.e- dev / prod
     }
 
     /* Below methods helps achieve Atomic operation using @Transactional annotation, see "SaveEntry" method of JornalEntryService class.
@@ -27,7 +30,7 @@ public class MyJournalApplication {
     */
 
     @Bean
-    public PlatformTransactionManager method_name(MongoDatabaseFactory dbFactory){
+    public PlatformTransactionManager method_name(MongoDatabaseFactory dbFactory) {
         return new MongoTransactionManager(dbFactory);
     }
 
