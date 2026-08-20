@@ -22,6 +22,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+// Below instance is used when we don't annotate class with "@slf4j", if we annotate, we don't need below class, also instead of logger we can use "log.error(); of slf4j"
+    // private static final Logger logger = LoggerFactory.getLogger(UserService.class); //This helps in storing the logs of mentioned class. (here UserService class is the identifier, it must be changed for correct logs acc. to required class.).
+
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     //Create service
     public boolean saveNewUser(User user) {
@@ -30,7 +33,18 @@ public class UserService {
             user.setRoles(Arrays.asList("USER"));
             userRepository.save(user);
             return true;
-        } catch (Exception e) {return false;}
+        } catch (Exception e) {
+
+            log.error("Error occured"); // This line contains the message which will be stored in logs. it has various types as written below.
+            log.error("Error occured for {} :", user.getUserName(), e); // here we have used placeholder {}, also without string concatenation i.e (without '+' symbol ).
+
+//  logger is used when we use instance approach, with @slf4j approach we use "log.____()";
+
+//            logger.warn("Error is here"); // All these gets printed in terminal by default.
+//            logger.info("Error is here");
+//            logger.debug("Error is here"); // Debug & Trace are not enabled by default, it needs customization to be enabled.
+//            logger.trace("Error is here");
+            return false;}
     }
     //Create Admin
     public void saveAdmin(User user) {

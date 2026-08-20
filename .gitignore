@@ -4,6 +4,8 @@
 *.war
 *.ear
 *.log
+*.yml
+*.log
 
 # === Maven ===
 target/
