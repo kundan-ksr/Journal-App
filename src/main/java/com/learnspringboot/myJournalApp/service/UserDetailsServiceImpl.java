@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service // It also Creates Object of below class as bean, but just for user understanding that it is a service class, we can use @Service in abc_Service classes instead of @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired

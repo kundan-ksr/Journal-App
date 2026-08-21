@@ -7,16 +7,18 @@ import com.learnspringboot.myJournalApp.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Component  // Creates Object of below class as bean,
+// @Component  // Creates Object of below class as bean,
 // so it can be used directly without initializing
 // the object of below class.
+
+@Service // It also Creates Object of below class as bean, but just for user understanding that it is a service class, we can use @Service in abc_Service classes instead of @Component
 @Slf4j
 public class JournalEntryService {
 
