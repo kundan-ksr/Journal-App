@@ -25,8 +25,8 @@ buildNumber.properties
 /src/main/resources/**
 
 # ignore Weather & Quote service
-src/main/java/com/learnspringboot/myJournalApp/service/WeatherService.java
-src/main/java/com/learnspringboot/myJournalApp/service/QuotesService.java
+/src/main/java/com/learnspringboot/myJournalApp/service/WeatherService.java
+/src/main/java/com/learnspringboot/myJournalApp/service/QuotesService.java
 
 # ignore application.yml
 /src/main/resources/application.yml
