@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableTransactionManagement // <--- For enabling transaction feature (Rollback if not complete, i.e, atomic) across desired method in whole application.
@@ -30,8 +31,13 @@ public class MyJournalApplication {
     */
 
     @Bean
-    public PlatformTransactionManager method_name(MongoDatabaseFactory dbFactory) {
+    public PlatformTransactionManager method_name_can_be_anything(MongoDatabaseFactory dbFactory) {
         return new MongoTransactionManager(dbFactory);
     }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    } // for External API's Call.
 
 }
